@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import Button from 'react-bootstrap/Button';
 import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
 
-function Timer(props) {
+const Timer = (props) => {
     const [countdown, setCountdown] = useState(props.duration);
     const [running, setRunning] = useState(false);
     const [timer, setTimer] = useState(null);
