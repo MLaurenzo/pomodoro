@@ -39,6 +39,9 @@ const Timer = (props) => {
     useEffect(() => {
         if (state.countdown <= 0) {
             handlePause();
+            if (props.onFinish) {
+                props.onFinish();
+            }
         }
     }, [state.countdown]);
 
