@@ -33,6 +33,7 @@ function Timer(props) {
     }
 
     useEffect(() => {
+        console.log("running changed")
         if (running) {
             const timer = setInterval(decrementCountdown, 1000);
             setTimer(timer)
@@ -46,8 +47,19 @@ function Timer(props) {
             {countdown}
             <div>
                 <ButtonToolbar>
-                    <Button variant="start" onClick={running ? handlePause : handleStart}>{running ? 'pause' : 'start'}</Button>
-                    <Button variant="reset" onClick={handleReset}>reset</Button>
+                    <Button
+                        variant="start"
+                        onClick={running ? handlePause : handleStart}
+                        disabled={countdown <= 0}
+                    >
+                        {running ? 'pause' : 'start'}
+                    </Button>
+                    <Button
+                        variant="reset"
+                        onClick={handleReset}
+                    >
+                        reset
+                    </Button>
                 </ButtonToolbar>
             </div>
         </div>
