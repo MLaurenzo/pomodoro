@@ -1,56 +1,56 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useReducer, useState} from 'react';
 import Button from 'react-bootstrap/Button';
 import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
 
 const Timer = (props) => {
-    const [countdown, setCountdown] = useState(props.duration);
     const [running, setRunning] = useState(false);
     const [timer, setTimer] = useState(null);
 
-    function handleStart() {
-        setRunning(true)
-    }
+    const reducer = (state, action) => {
+        switch (action.type) {
+            case 'decrement':
+                return {countdown: state.countdown - 1};
+            case 'reset':
+                return {countdown: props.duration};
+            default:
+                throw new Error();
+        }
+    };
 
-    function handlePause() {
-        setRunning(false)
-    }
+    const [state, dispatch] = useReducer(reducer, {countdown: props.duration});
 
-    function handleReset() {
+    const handleStart = () => {
+        const timer = setInterval(() => dispatch({type: 'decrement'}), 1000);
+        setTimer(timer);
+        setRunning(true);
+    };
+
+    const handlePause = () => {
+        clearInterval(timer);
+        setTimer(null);
         setRunning(false);
-        setCountdown(props.duration)
-    }
+    };
 
-    function decrementCountdown() {
-        setCountdown(countdown => {
-            if (countdown > 0) {
-                return countdown - 1
-            } else {
-                clearInterval(timer);
-                setTimer(null);
-                return 0;
-            }
-        });
-    }
+    const handleReset = () => {
+        handlePause();
+        dispatch({type: 'reset'});
+    };
 
     useEffect(() => {
-        console.log("running changed")
-        if (running) {
-            const timer = setInterval(decrementCountdown, 1000);
-            setTimer(timer)
-        } else {
-            clearInterval(timer);
+        if (state.countdown <= 0) {
+            handlePause();
         }
-    }, [running]);
+    }, [state.countdown]);
 
     return (
         <div>
-            {countdown}
+            {state.countdown}
             <div>
                 <ButtonToolbar>
                     <Button
                         variant="start"
                         onClick={running ? handlePause : handleStart}
-                        disabled={countdown <= 0}
+                        disabled={state.countdown <= 0}
                     >
                         {running ? 'pause' : 'start'}
                     </Button>
