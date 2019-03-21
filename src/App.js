@@ -1,16 +1,10 @@
-import React, { Component } from 'react';
-import './App.css';
-import Timer from './timer/Timer.js'
+import React from 'react';
+import Session from "./pomodoro/Session.js";
 
-class App extends Component {
-  render() {
+const App = () => {
     return (
-        <Timer
-            duration={5}
-            onFinish={() => console.log('finished')}
-        />
+        <Session/>
     );
-  }
-}
+};
 
 export default App;
